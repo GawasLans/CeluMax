@@ -1,0 +1,763 @@
+/* ========================================================= */
+/* VARIABLES Y RESET BÁSICO */
+/* ========================================================= */
+:root {
+    /* Colores de Marca CeluMax */
+    --celumax-blue: #007bff; 
+    --text-dark: #333;
+    --text-light: white;
+    --header-border: #eee;
+    --box-bg: white; /* Fondo blanco para elementos sobre azul */
+
+    /* Variables para el Patrón de Líneas */
+    --line-color: rgba(255, 255, 255, 0.15); 
+    --line-spacing: 20px; 
+    --line-thickness: 1px; 
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.main-header {
+    /* Fondo azul con patrón extendido a todo el encabezado */
+    background: 
+        linear-gradient(90deg, var(--line-color) var(--line-thickness), transparent var(--line-thickness)) 0 0, 
+        linear-gradient(var(--line-color) var(--line-thickness), transparent var(--line-thickness)) 0 0, 
+        var(--celumax-blue);
+    background-size: var(--line-spacing) var(--line-spacing);
+    background-repeat: repeat;
+}
+
+.main-header a {
+    text-decoration: none;
+    color: var(--text-dark);
+}
+
+/* ========================================================= */
+/* 1. BARRA SUPERIOR (Utility Bar) */
+/* ========================================================= */
+.header-top {
+    background: transparent; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 5%;
+    font-size: 0.85em;
+    color: var(--text-light);
+}
+
+/* ... (Estilos de util-links y user-links, sin cambios) ... */
+
+/* ========================================================= */
+/* 2. BARRA CENTRAL (Logo, Búsqueda, Iconos) - CORREGIDA */
+/* ========================================================= */
+.header-middle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 5%; /* Ajustamos padding vertical aquí */
+    background-color: transparent; 
+    border-bottom: none; 
+}
+
+.header-middle .logo a {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--text-light); /* Logo BLANCO sobre AZUL */
+}
+
+/* Estilo de la Caja de Búsqueda Grande */
+.search-box-container {
+    display: flex;
+    flex-grow: 1; /* Ocupa el espacio restante */
+    max-width: 600px;
+    margin: 0 20px;
+    
+    /* Fondo BLANCO para la caja, el contenedor principal es AZUL */
+    background-color: var(--box-bg); 
+    border: 1px solid var(--box-bg); 
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.search-input-lg {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    font-size: 1em;
+}
+
+.search-btn {
+    /* Icono de búsqueda en color BLANCO sobre AZUL (para el fondo del botón) */
+    background-color: var(--celumax-light-blue); /* Azul ligeramente más oscuro que el fondo */
+    color: var(--text-light); 
+    border: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1.2em;
+    transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+    background-color: var(--celumax-blue);
+}
+
+/* Iconos de Acciones de Usuario */
+.user-actions {
+    display: flex;
+    align-items: center;
+}
+.user-actions a {
+    font-size: 1.5em;
+    margin-left: 20px;
+    color: var(--text-light); /* Iconos BLANCOS sobre AZUL */
+    transition: color 0.2s;
+}
+
+.user-actions a:hover {
+    color: var(--header-border); /* Gris muy claro al pasar el mouse */
+}
+
+/* ========================================================= */
+/* 3. BARRA INFERIOR (CATEGORÍAS) */
+/* ========================================================= */
+.header-bottom {
+    background-color: var(--box-bg);
+    padding: 10px 5%;
+    border-bottom: 2px solid var(--celumax-blue); 
+}
+
+.categories-nav {
+    display: flex;
+    gap: 30px;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.category-item {
+    cursor: pointer;
+    padding: 5px 0;
+    color: var(--text-dark);
+    position: relative; /* CLAVE para el dropdown de ESCRITORIO */
+    transition: color 0.2s;
+    
+    /* Ocultar el nuevo toggle interno en ESCRITORIO */
+    .submenu-toggle {
+        display: none;
+    }
+    
+    /* Estilo del título para separar del toggle en móvil */
+    .category-title {
+        display: inline-block;
+    }
+}
+
+.category-item:hover {
+    color: var(--celumax-blue); 
+}
+
+.category-item i {
+    margin-right: 5px;
+    color: var(--celumax-blue); 
+}
+
+/* ========================================================= */
+/* ESTILO DEL MENÚ DESPLEGABLE (DROPDOWN) - ESCRITORIO */
+/* ========================================================= */
+.dropdown-menu {
+    position: absolute; 
+    top: 100%;
+    left: 0;
+    background-color: var(--box-bg);
+    border: 1px solid var(--header-border);
+    border-top: 2px solid var(--celumax-blue); 
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada */
+    z-index: 10;
+    display: none; 
+    min-width: 200px; /* Asegura un buen ancho */
+    padding: 5px 0; /* Reducimos padding principal, lo ponemos en los 'a' */
+    font-size: 1em; /* Texto ligeramente más grande */
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 10px 20px; /* Aumentamos el padding para más espacio */
+    white-space: nowrap;
+    color: var(--text-dark); /* Texto oscuro por defecto */
+    font-weight: normal; /* Asegura que el texto no esté en negrita */
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Estilo al pasar el mouse */
+.dropdown-menu a:hover {
+    background-color: var(--header-border); /* Fondo gris muy claro */
+    color: var(--celumax-blue); /* Texto azul */
+}
+
+.category-item:hover .dropdown-menu {
+    display: block; /* Vuelve a funcionar el HOVER */
+}
+
+/* ... (Estilos de dropdown-menu a, sin cambios) ... */
+
+/* Esconder el toggle principal en ESCRITORIO */
+#categories-toggle,
+.categories-icon {
+    display: none;
+}
+
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVE) */
+/* ========================================================= */
+
+@media (max-width: 768px) {
+    /* 1. Ocultar elementos secundarios en la barra superior */
+    /* ... (Estilos de header-top, sin cambios relevantes) ... */
+
+    /* 2. Reorganizar la barra central (Logo, Búsqueda, Acciones) */
+    .header-middle {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 5%; 
+    }
+    .header-middle .logo a {
+        padding-bottom: 10px;
+    }
+    
+    .search-box-container {
+        order: 2; 
+        width: 100%;
+        max-width: none;
+        margin: 10px 0;
+    }
+    .user-actions {
+        order: 1;
+        width: 100%;
+        justify-content: flex-end; /* Alinear iconos a la derecha en móvil */
+    }
+    .user-actions a {
+        color: var(--text-light); /* Asegura iconos blancos en el fondo azul */
+    }
+    
+    /* 3. Menú de Categorías (Responsive con Desplegables Individuales) */
+    .header-bottom {
+        padding: 0 5%; 
+        border-bottom: none;
+    }
+    
+    /* Mostrar el botón de hamburguesa principal */
+    .categories-icon {
+        display: flex; 
+        align-items: center;
+        cursor: pointer;
+        padding: 15px 0;
+        color: var(--celumax-blue);
+        font-weight: bold;
+        width: 100%;
+        border-bottom: 2px solid var(--celumax-blue);
+    }
+    
+    .categories-nav {
+        display: none; /* Ocultar la lista de categorías por defecto */
+        flex-direction: column; 
+        width: 100%;
+        gap: 0;
+        border-top: 1px solid var(--header-border);
+    }
+
+    /* CLAVE 1: Muestra el menú principal cuando el checkbox está marcado */
+    #categories-toggle:checked ~ .categories-nav {
+        display: flex; 
+    }
+    
+    /* Estilo para los ítems de categoría en móvil */
+    .category-item {
+    /* ... (Mantener estilos existentes) ... */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* CLAVE: Permite que el submenú ocupe la siguiente línea */
+}
+
+/* Estilo del título de la categoría (para que no ocupe todo el ancho) */
+.category-title {
+    padding: 15px 0;
+    flex-grow: 1; /* Permite que el título ocupe el espacio */
+}
+    
+    /* CLAVE 2: Estilo y posición del TOGGLE INTERNO (la flecha) */
+    .submenu-toggle {
+        display: block; /* Muestra el botón de la flecha */
+        padding: 15px;
+        cursor: pointer;
+        color: var(--celumax-blue);
+        order: 2;
+    }
+    .submenu-toggle i {
+        margin-right: 0;
+        transition: transform 0.3s;
+    }
+    
+    /* Rotar la flecha cuando el checkbox interno está marcado */
+    .category-item input:checked ~ .submenu-toggle i {
+        transform: rotate(180deg);
+    }
+    
+    /* DROPDOWN EN MÓVIL (Inicialmente oculto) */
+    .dropdown-menu {
+    /* ... (Mantener position: static, display: none, etc.) ... */
+    display: none; 
+    position: static; 
+    border: none;
+    box-shadow: none;
+    width: 100%;
+    background-color: var(--header-border); /* Fondo gris claro (más profesional) */
+    padding: 0; /* Eliminamos el padding principal */
+    order: 3;
+    flex-basis: 100%; 
+}
+    
+    /* CLAVE 3: Muestra el submenú cuando el checkbox interno está marcado */
+    .dropdown-menu a:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu a:hover {
+    background-color: transparent; 
+    color: var(--celumax-blue);
+}
+
+/* CLAVE 3: Muestra el submenú cuando el checkbox interno está marcado */
+.category-item input:checked ~ .dropdown-menu {
+    display: block;
+}
+}
+
+/* ========================================================= */
+/* SECCIÓN DE CONTENIDO PRINCIPAL Y CUADRÍCULA DE PRODUCTOS */
+/* ========================================================= */
+.content {
+    width: 90%;
+    max-width: 1280px; /* Ancho máximo un poco más grande */
+    margin: 30px auto; 
+    padding: 0 20px; /* Ajuste del padding */
+}
+
+.content h1 {
+    font-size: 2.2em;
+    color: var(--text-dark);
+    border-bottom: 2px solid var(--header-border);
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+/* --- ESTILO PARA CADA SECCIÓN DE CATEGORÍA --- */
+.category-section {
+    /* Mantenemos el fondo de caja blanca, pero eliminamos el padding horizontal */
+    margin-bottom: 50px;
+    background-color: var(--box-bg);
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    padding: 25px 0 25px 0; /* Padding vertical, 0 horizontal */
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 25px 20px 25px; /* Padding interno */
+    border-bottom: 1px solid var(--header-border); /* Separador debajo del título */
+    margin-bottom: 25px;
+}
+
+.category-title-section {
+    font-size: 1.8em;
+    color: var(--text-dark);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.category-title-section::before {
+    content: '';
+    position: absolute;
+    bottom: -21px; /* Ajusta la posición de la línea verde */
+    left: 0;
+    width: 100%; /* La línea abarca todo el título */
+    height: 4px;
+    background-color: var(--celumax-green); /* Línea verde bajo el título */
+    border-radius: 2px;
+}
+
+
+.category-title-section i {
+    margin-right: 12px;
+    color: var(--celumax-green); /* Ícono en verde */
+    font-size: 1.2em;
+}
+
+.btn-ver-todos {
+    background-color: transparent;
+    border: 1px solid var(--celumax-blue);
+    color: var(--celumax-blue);
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+}
+
+.btn-ver-todos:hover {
+    background-color: var(--celumax-blue);
+    color: var(--text-light);
+}
+
+.btn-ver-todos i {
+    margin-left: 8px;
+    font-size: 0.8em;
+}
+
+
+/* --- CUADRÍCULA DE PRODUCTOS DENTRO DE CADA SECCIÓN --- */
+
+
+.carousel-container {
+    overflow: hidden; /* Oculta todo lo que se desborda horizontalmente */
+    width: 100%;
+    padding: 0 20px; /* Espacio para que las flechas no cubran el primer/último producto */
+}
+
+.carousel-wrapper-full {
+    position: relative; /* CLAVE: Para posicionar las flechas absolutas */
+    margin: 0 10px; /* Margen para que las flechas no toquen el borde */
+}
+
+/* 2. El wrapper que contiene TODAS las tarjetas */
+.productos-carousel-wrapper {
+    display: flex;
+    transition: transform 0.5s ease-in-out; 
+    width: fit-content; /* Deja que el contenido (12 tarjetas) defina el ancho */
+}
+
+.productos-carousel-wrapper .producto-card:last-child {
+    border-right: none;
+}
+
+/* --- ESTILO DE LA TARJETA DE PRODUCTO INDIVIDUAL --- */
+.producto-card {
+    /* Define el ancho de 6 tarjetas por vista.
+       (100% de la ventana) / 6 = 16.666% */
+    flex: 0 0 16.666%; 
+    max-width: 16.666%;
+    
+    /* Diseño de la Tarjeta */
+    padding: 15px 10px; /* Aumentamos el padding vertical para más espacio */
+    margin: 0; /* 🚨 IMPORTANTE: Elimina el margen horizontal aquí 🚨 */
+    box-sizing: border-box;
+    display: flex; 
+    flex-direction: column; 
+    text-align: center;
+    border-right: 1px solid var(--header-border); /* Línea divisoria */
+}
+
+.producto-card a {
+    text-decoration: none; /* Quitar subrayado de enlaces de producto */
+}
+
+/* 4. Estilos para la navegación (flechas) */
+.carousel-nav {
+    position: absolute; /* Para que las flechas floten sobre el carrusel */
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+}
+.nav-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white; /* Fondo blanco */
+    color: var(--celumax-blue);
+    border: 1px solid var(--header-border);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.nav-arrow:hover {
+    background-color: var(--celumax-blue);
+    color: white;
+}
+
+.prev-btn {
+    left: 0; /* Posiciona a la izquierda del carousel-wrapper-full */
+}
+
+.next-btn {
+    right: 0; /* Posiciona a la derecha del carousel-wrapper-full */
+}
+
+
+
+.producto-card:hover {
+    transform: translateY(-3px); 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image-wrapper {
+    position: relative;
+    height: 150px; /* Altura fija para el contenedor de imagen */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.product-image-wrapper img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.badge-oferta {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    background-color: var(--celumax-red);
+    color: var(--text-light);
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+    z-index: 5;
+}
+
+.product-name {
+    height: 3.2em; /* Altura un poco mayor para títulos de 2 líneas */
+    line-height: 1.6em;
+    margin-top: 5px;
+}
+
+.product-description {
+    font-size: 0.85em;
+    color: #888;
+    margin-bottom: 10px;
+    height: 2.5em; /* Altura fija para la descripción */
+    overflow: hidden;
+    line-height: 1.25em;
+}
+
+.product-price {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--celumax-blue);
+    margin: 10px 0 5px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-price .old-price {
+    font-size: 0.9em;
+    color: #999;
+    text-decoration: line-through;
+    margin-bottom: 3px;
+}
+
+.product-price-ars {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: var(--celumax-blue);
+    margin: 10px 0 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.product-actions {
+    display: none;
+    justify-content: center;
+    gap: 10px;
+    margin-top: auto; /* Empuja las acciones al final */
+}
+
+.product-actions .action-btn {
+    background-color: var(--celumax-blue);
+    color: var(--text-light);
+    border: none;
+    border-radius: 50%; /* Botones circulares */
+    width: 38px;
+    height: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    text-decoration: none; /* Para los 'a' */
+    margin: 0;
+}
+
+.product-actions .action-btn:hover {
+    background-color: var(--celumax-green); /* Verde al pasar el mouse */
+    transform: translateY(-2px);
+}
+
+/* Botón de añadir al carrito más prominente */
+.product-actions .add-to-cart {
+    display: block;
+    margin: 5px auto 0 auto; /* Centra el botón de carrito */
+    background-color: var(--celumax-blue); /* Color principal */
+    width: 42px; /* Ligeramente más grande */
+    height: 42px;
+    font-size: 1.1em;
+}
+.product-actions .add-to-cart:hover {
+    background-color: var(--celumax-green);
+}
+
+
+/* Mensaje "No hay productos" */
+.no-products-message {
+    text-align: center;
+    font-size: 1.2em;
+    color: #777;
+    padding: 30px;
+}
+
+
+/* ========================================================= */
+/* MEDIA QUERIES (RESPONSIVE PARA PRODUCTOS) */
+/* ========================================================= */
+@media (max-width: 992px) {
+
+     /* Tabletas (Mostrar 4 productos) */
+    .producto-card {
+        flex: 0 0 25%; /* 4 por fila */
+        max-width: 25%;
+    }
+
+    .productos-grid-section {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Más pequeño en tabletas */
+    }
+    .category-title-section {
+        font-size: 1.5em;
+    }
+}
+
+@media (max-width: 768px) {
+    .content {
+        padding: 0 10px; /* Reducir padding en móvil */
+        margin-top: 20px;
+    }
+    .content h1 {
+        font-size: 1.8em;
+        margin-bottom: 30px;
+    }
+    .category-header {
+        flex-direction: column; /* Apila título y botón */
+        align-items: flex-start;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+        padding: 0 15px 15px 15px; /* Ajustar padding del header de categoría */
+    }
+    .category-title-section {
+        font-size: 1.4em;
+        margin-bottom: 15px;
+    }
+    .category-title-section::before {
+        bottom: -16px; /* Ajusta la posición de la línea verde */
+    }
+    .category-section {
+        padding: 15px 0;
+    }
+
+    .btn-ver-todos {
+        width: 100%;
+        justify-content: center; /* Centra el texto del botón */
+    }
+    .productos-grid-section {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); /* 2 columnas en móvil */
+        gap: 15px;
+        padding: 0 15px;
+    }
+    .producto-card {
+        flex: 0 0 33.333%; /* 3 por fila */
+        max-width: 33.333%;
+    }
+    .nav-arrow {
+        width: 30px; /* Flechas más pequeñas */
+        height: 30px;
+        font-size: 0.8em;
+    }
+    
+    .carousel-container {
+        padding: 0 15px; /* Reducir padding de la ventana */
+    }
+    .product-image-wrapper {
+        height: 120px;
+    }
+    .product-name {
+        font-size: 1em;
+        height: 2.6em;
+    }
+    .product-description {
+        display: none; /* Ocultar descripción en pantallas muy pequeñas */
+    }
+    .product-price {
+        font-size: 1.1em;
+    }
+    .product-price-ars {
+        font-size: 0.8em;
+    }
+    .product-actions .action-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9em;
+    }
+    .product-actions .add-to-cart {
+        width: 36px;
+        height: 36px;
+        font-size: 1em;
+    }
+}
+
+@media (max-width: 500px) {
+    .productos-grid-section {
+        grid-template-columns: 1fr; /* Una sola columna en los móviles más pequeños */
+        padding: 0 10px;
+    }
+    .content {
+        padding: 0;
+    }
+    .category-section {
+        padding: 15px 0;
+    }
+    .category-header {
+        padding: 0 15px 15px 15px;
+    }
+    .producto-card {
+        flex: 0 0 50%; /* 2 por fila */
+        max-width: 50%;
+    }
+    
+    .carousel-container {
+        padding: 0 10px;
+    }
+}

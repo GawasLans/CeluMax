@@ -1,0 +1,181 @@
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ titulo }} | CeluMax</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-top">
+            <div class="util-links">
+                <span><i class="fas fa-coins"></i> Cotización $1 = ARS $850</span> 
+                <span><i class="fas fa-map-marker-alt"></i> ¿Cómo llegar?</span>
+            </div>
+            <div class="user-links">
+                <span><i class="fas fa-globe-americas"></i> Argentina <i class="fas fa-caret-down"></i></span>
+                <span><i class="fas fa-question-circle"></i> Resuelve tus dudas</span>
+            </div>
+        </div>
+
+        <div class="header-middle">
+            <div class="logo">
+                <a href="{% url 'lista_productos' %}">CELUMAX</a>
+            </div>
+            
+            <div class="search-box-container">
+                <input type="text" placeholder="¿Qué desea buscar?" class="search-input-lg">
+                <button type="submit" class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+
+            <div class="user-actions">
+                <a href="#" class="action-icon"><i class="fas fa-heart"></i></a>
+                <a href="#" class="action-icon"><i class="fas fa-user-circle"></i></a>
+                <a href="#" class="action-icon cart-btn"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        </div>
+
+        <div class="header-bottom">
+            
+            <input type="checkbox" id="categories-toggle" style="display: none;">
+            <label for="categories-toggle" class="categories-icon">
+                <i class="fas fa-bars"></i> Catálogo por Categoría
+            </label>
+            
+            <nav class="categories-nav">
+                
+                <div class="category-item dropdown-toggle">
+                    <input type="checkbox" id="sm-toggle" style="display: none;">
+                    <label for="sm-toggle" class="submenu-toggle"><i class="fas fa-chevron-down"></i></label>
+                    
+                    <span class="category-title"><i class="fas fa-mobile-alt"></i> Smartphones</span>
+                    
+                    <div class="dropdown-menu sm-dropdown">
+                        <a href="#">Mostrar Todo</a>
+                        <a href="#">Celulares</a>
+                        <a href="#">Relojes Inteligentes</a>
+                        <a href="#">Accesorios</a>
+                    </div>
+                </div>
+
+                <div class="category-item dropdown-toggle">
+                    <input type="checkbox" id="games-toggle" style="display: none;">
+                    <label for="games-toggle" class="submenu-toggle"><i class="fas fa-chevron-down"></i></label>
+                    <span class="category-title"><i class="fas fa-gamepad"></i> Games</span>
+                    <div class="dropdown-menu games-dropdown">
+                        <a href="#">Mostrar Todo</a>
+                        <a href="#">Consolas</a>
+                        <a href="#">Accesorios</a>
+                    </div>
+                </div>
+
+                <div class="category-item dropdown-toggle">
+                    <input type="checkbox" id="info-toggle" style="display: none;">
+                    <label for="info-toggle" class="submenu-toggle"><i class="fas fa-chevron-down"></i></label>
+                    <span class="category-title"><i class="fas fa-laptop-code"></i> Informática</span>
+                    <div class="dropdown-menu info-dropdown">
+                        <a href="#">Mostrar Todo</a>
+                        <a href="#">Hardware</a>
+                        <a href="#">Perifericos</a>
+                    </div>
+                </div>
+
+                <div class="category-item dropdown-toggle">
+                    <input type="checkbox" id="elec-toggle" style="display: none;">
+                    <label for="elec-toggle" class="submenu-toggle"><i class="fas fa-chevron-down"></i></label>
+                    <span class="category-title"><i class="fas fa-tv"></i> Electrónicos</span>
+                    <div class="dropdown-menu elec-dropdown">
+                        <a href="#">Mostrar Todo</a>
+                        <a href="#">TV, Audio y Video</a>
+                        <a href="#">Teléfonos</a>
+                        <a href="#">Seguridad</a>
+                        <a href="#">Fotografia y Filmacion</a>
+                    </div>
+                </div>
+
+                <div class="category-item dropdown-toggle">
+                    <input type="checkbox" id="ropa-toggle" style="display: none;">
+                    <label for="ropa-toggle" class="submenu-toggle"><i class="fas fa-chevron-down"></i></label>
+                    <span class="category-title"><i class="fas fa-tshirt"></i> indumentaria o ropa</span>
+                    <div class="dropdown-menu ropa-dropdown">
+                        <a href="#">Mostrar Todo</a>
+                        <a href="#">Remeras</a>
+                        <a href="#">Pantalones</a>
+                        <a href="#">Zapatillas</a>
+                        <a href="#">Gorras</a>
+                    </div>
+                </div>
+                
+            </nav>
+        </div>
+    </header>
+    
+    <main class="content">
+    <h1>Nuestro Catálogo</h1>
+
+    {% for categoria_data in categorias_con_productos %}
+<section class="category-section">
+    <div class="category-header">
+        <h2 class="category-title-section">
+            <i class="{{ categoria_data.icono_clase }}"></i> {{ categoria_data.nombre }}
+        </h2>
+        <a href="{% url 'productos_por_categoria' nombre_categoria_slug=categoria_data.slug_url %}" class="btn-ver-todos">VER TODOS <i class="fas fa-chevron-right"></i></a>
+    </div>
+
+    <div class="carousel-wrapper-full">
+        
+        <button class="nav-arrow prev-btn" data-category-id="{{ categoria_data.nombre }}" aria-label="Anterior">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <div class="carousel-container">
+            <div class="productos-carousel-wrapper" id="carousel-{{ categoria_data.nombre }}">
+                {% for producto in categoria_data.productos %}
+                <div class="producto-card">
+                    <a href="#"> <div class="product-image-wrapper">
+                            {% if producto.imagen %}
+                                <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}">
+                            {% else %}
+                                <img src="{% static 'img/placeholder.png' %}" alt="Imagen no disponible">
+                            {% endif %}
+                            
+                            {% if producto.es_oferta %}
+                                <span class="badge-oferta">OFERTA</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    
+                    <h3 class="product-name">{{ producto.nombre|truncatechars:40 }}</h3>
+                    
+                    <p class="product-price-ars">$ {{ producto.precio_ars|floatformat:0|intcomma }}</p> 
+                    
+                    <div class="product-actions">
+                        <a href="#" class="action-btn"><i class="fas fa-heart"></i></a>
+                        <a href="#" class="action-btn"><i class="fas fa-code-compare"></i></a>
+                    </div>
+                    <a href="#" class="action-btn add-to-cart"><i class="fas fa-shopping-cart"></i></a>
+                </div>
+                {% empty %}
+                <p class="no-products-message">No hay productos disponibles en esta categoría.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <button class="nav-arrow next-btn" data-category-id="{{ categoria_data.nombre }}" aria-label="Siguiente">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+    </div>
+    </section>
+    {% empty %}
+        <p class="no-products-message">No hay categorías con productos para mostrar en este momento.</p>
+    {% endfor %}
+</main>
+<script src="{% static 'js/carrusel.js' %}"></script>
+</body>
+</html>
